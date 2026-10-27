@@ -1,5 +1,5 @@
-# Reads the notepad once a day so the free Supabase project never pauses
-# for inactivity. It only reads; it never changes anything.
+# Pings the database once a day so the free Supabase project never pauses
+# for inactivity. It never reads or changes the notepad.
 name: Keep Supabase awake
 
 on:
@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read the notepad from Supabase
+      - name: Ping Supabase
         run: |
           # The URL and public key are taken from config.js, so there are no secrets to set up.
           URL=$(grep -o 'https://[a-z0-9]*\.supabase\.co' config.js | head -n 1)
@@ -26,9 +26,10 @@ jobs:
             echo "Could not find the Supabase URL and publishable key in config.js"
             exit 1
           fi
-          curl --fail --silent --show-error --max-time 30 \
-            "$URL/rest/v1/notepad?select=id,updated_at&id=eq.1" \
-            -H "apikey: $KEY"
+          # Calls a function that needs no password and reveals nothing.
+          curl --fail --silent --show-error --max-time 30 -X POST \
+            "$URL/rest/v1/rpc/notepad_ping" \
+            -H "apikey: $KEY" -H "Content-Type: application/json" -d '{}'
           echo
           echo "Supabase answered, so the project stays awake."
 

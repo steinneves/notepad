@@ -94,3 +94,40 @@ footer {
 .status[data-state="error"] .dot { background: var(--bad); }
 
 .count.full { color: var(--bad); }
+
+[hidden] { display: none !important; }
+
+.lock {
+  margin: auto;
+  width: min(18rem, calc(100% - 2rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lock label { font-size: 0.875rem; color: var(--muted); }
+
+.lock input,
+.lock button {
+  font: inherit;
+  font-size: 16px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  color: var(--fg);
+  background: transparent;
+}
+
+.lock input { letter-spacing: 0.2em; }
+.lock input:focus { outline: 2px solid var(--caret); outline-offset: 1px; }
+
+.lock button {
+  cursor: pointer;
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+.lock button:disabled { opacity: 0.6; cursor: default; }
+
+.lock-message { margin: 0; min-height: 1.4em; font-size: 0.875rem; color: var(--bad); }
