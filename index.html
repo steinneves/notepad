@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; connect-src https://*.supabase.co wss://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Notepad</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <textarea id="pad" maxlength="10000" spellcheck="true" autocomplete="off"
+              aria-label="Shared notepad" placeholder="Loading…" readonly></textarea>
+  </main>
+  <footer>
+    <span id="status" class="status" data-state="connecting" role="status" aria-live="polite">
+      <span class="dot" aria-hidden="true"></span><span id="status-text">Connecting…</span>
+    </span>
+    <span id="count" class="count">0 / 10,000</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"
+          integrity="sha384-BWcjm9OdFth9TbhCxZPdm+gAOUMAzQy9nmTs12ioXdCcbVnJaPMn+fMUoQCLt60R"
+          crossorigin="anonymous"></script>
+  <script src="config.js"></script>
+  <script src="merge.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

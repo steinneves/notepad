@@ -1,0 +1,96 @@
+:root {
+  --bg: #fbfaf7;
+  --fg: #1f2328;
+  --muted: #6e7781;
+  --line: #e4e2dc;
+  --ok: #1a7f37;
+  --busy: #9a6700;
+  --bad: #cf222e;
+  --caret: #0969da;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181c;
+    --fg: #e6e6e3;
+    --muted: #8b949e;
+    --line: #2a2e35;
+    --ok: #3fb950;
+    --busy: #d29922;
+    --bad: #f85149;
+    --caret: #58a6ff;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+textarea {
+  flex: 1;
+  width: 100%;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: max(1.5rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 1.5rem max(1rem, env(safe-area-inset-left));
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: inherit;
+  caret-color: var(--caret);
+  font: 1.0625rem/1.65 ui-serif, Georgia, "Iowan Old Style", serif;
+}
+
+/* Keeps iOS from zooming in when the textarea is focused. */
+@media (max-width: 600px) {
+  textarea { font-size: 16px; }
+}
+
+textarea::placeholder { color: var(--muted); }
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem max(1rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status { display: inline-flex; align-items: center; gap: 0.45rem; }
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.status[data-state="connected"] .dot { background: var(--ok); }
+.status[data-state="saving"] .dot,
+.status[data-state="connecting"] .dot { background: var(--busy); }
+.status[data-state="offline"] .dot,
+.status[data-state="error"] .dot { background: var(--bad); }
+
+.count.full { color: var(--bad); }

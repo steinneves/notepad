@@ -1,0 +1,41 @@
+# Reads the notepad once a day so the free Supabase project never pauses
+# for inactivity. It only reads; it never changes anything.
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # every day at 06:17 UTC
+  workflow_dispatch: # adds a "Run workflow" button on the Actions tab
+
+permissions:
+  contents: read
+  actions: write # only used to stop GitHub from auto-disabling this schedule
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the notepad from Supabase
+        run: |
+          # The URL and public key are taken from config.js, so there are no secrets to set up.
+          URL=$(grep -o 'https://[a-z0-9]*\.supabase\.co' config.js | head -n 1)
+          KEY=$(grep -o 'sb_publishable_[A-Za-z0-9_-]*' config.js | head -n 1)
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "Could not find the Supabase URL and publishable key in config.js"
+            exit 1
+          fi
+          curl --fail --silent --show-error --max-time 30 \
+            "$URL/rest/v1/notepad?select=id,updated_at&id=eq.1" \
+            -H "apikey: $KEY"
+          echo
+          echo "Supabase answered, so the project stays awake."
+
+      # GitHub turns off scheduled workflows in repos with no activity for 60 days.
+      # Re-enabling the workflow resets that timer.
+      - name: Keep this schedule from being turned off
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method PUT "repos/${{ github.repository }}/actions/workflows/keep-alive.yml/enable"
